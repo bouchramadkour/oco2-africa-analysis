@@ -1,0 +1,14 @@
+data/
+data_shapefile/
+data_csv/
+data_raster/
+*.nc
+*.nc4
+*.csv
+*.tif
+*.hdf5
+__pycache__/
+*.pyc
+*.ipynb_checkpoints/
+.DS_Store
+Thumbs.db 
