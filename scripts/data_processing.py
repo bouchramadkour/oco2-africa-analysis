@@ -34,10 +34,10 @@ def convert_all_nc4_to_csv(input_dir, output_dir):
     
     for f in files:
         date_info = extract_date_from_filename(f)
-        df = process_single_nc4(os.path.join(input_dir, f), date_info)
+        df = process_single_nc4(os.path.join(input_dir, f), date_info) # /data/file1.nc4
         
-        output_name = f.replace(".nc4", ".csv")
-        df.to_csv(os.path.join(output_dir, output_name), index=False)
+        output_name = f.replace(".nc4", ".csv") # file1.nc4 -> file1.csv
+        df.to_csv(os.path.join(output_dir, output_name), index=False) # /data_csv/file1.csv #index=False prevents writing row numbers to the CSV (index column : 0, 1, 2, etc.) which is not needed here since we have a unique sounding_id for each row.
     print(f"Processed {len(files)} files.")
 
 def load_combined_dataframe(csv_dir):

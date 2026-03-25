@@ -22,6 +22,7 @@ def plot_annual_mean_map(gdf_clipped, africa_shape):
     )
     africa_shape.boundary.plot(ax=ax, edgecolor="black", linewidth=1)
     _apply_map_style(ax, "Mean XCO2 over Africa (Annual)")
+    plt.savefig("./results/annual_co2_map.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 def plot_seasonal_maps(df_africa, africa_shape):
@@ -49,6 +50,7 @@ def plot_seasonal_maps(df_africa, africa_shape):
     sm = plt.cm.ScalarMappable(cmap='viridis', norm=mpl.colors.Normalize(vmin=420, vmax=424))
     cbar_ax = fig.add_axes([0.92, 0.15, 0.015, 0.7])
     fig.colorbar(sm, cax=cbar_ax, label='Mean XCO2 (ppm)')
+    plt.savefig("./results/seasonal_co2_map.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 def plot_monthly_timeseries(df_africa):
@@ -74,15 +76,33 @@ def plot_monthly_grid(gdf_final_points, africa_shape):
             gdf_m.plot(ax=ax, column='xco2', cmap='viridis', marker='s', markersize=60, vmin=420, vmax=424)
         africa_shape.boundary.plot(ax=ax, edgecolor='black', linewidth=1)
         _apply_map_style(ax, month_names[m-1])
+    plt.savefig("./results/monthly_co2_map.png", dpi=300, bbox_inches='tight')
     plt.show()
 
+
+##ON SUPPRIME
 import seaborn as sns
 
 def plot_co2_by_land_cover(df):
-    """Draws a boxplot showing CO2 distribution for each land cover type."""
-    plt.figure(figsize=(12, 6))
-    sns.boxplot(x='land_cover_name', y='xco2', data=df)
-    plt.xticks(rotation=45)
-    plt.title("XCO2 Distribution by Land Cover Type in Africa")
-    plt.ylabel("XCO2 (ppm)")
+    """Boxplot showing CO2 distribution for each land cover type."""
+    
+    # trier les classes dans l'ordre MODIS
+    lc_order = [
+        'Evergreen Needleleaf Forest','Evergreen Broadleaf Forest','Deciduous Needleleaf Forest',
+        'Deciduous Broadleaf Forest','Mixed Forest','Closed Shrublands','Open Shrublands',
+        'Woody Savannas','Savannas','Grasslands','Permanent Wetlands','Croplands','Urban',
+        'Cropland/Natural Mosaic','Snow/Ice','Barren','Water'
+    ]
+    
+    plt.figure(figsize=(16,6))
+    sns.boxplot(
+        x='land_cover_name', y='xco2', data=df, order=lc_order, palette="Set3"
+    )
+    
+    plt.xticks(rotation=45, ha='right')
+    plt.ylabel("XCO₂ (ppm)")
+    plt.xlabel("Land Cover Type")
+    plt.title("XCO₂ Distribution by Land Cover Type in Africa")
+    plt.tight_layout()
     plt.show()
+

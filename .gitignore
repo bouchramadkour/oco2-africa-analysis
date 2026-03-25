@@ -12,3 +12,5 @@ __pycache__/
 *.ipynb_checkpoints/
 .DS_Store
 Thumbs.db 
+brouillon1.ipynb
+brouillon2.ipynb

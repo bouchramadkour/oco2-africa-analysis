@@ -43,15 +43,43 @@ def clip_to_africa(gdf_grid, africa_shape):
     return gpd.clip(gdf_grid, africa_shape)
 
 import rasterio
+import pandas as pd
 
+MODIS_LC_LABELS = {
+    1: 'Evergreen Needleleaf Forest',
+    2: 'Evergreen Broadleaf Forest',
+    3: 'Deciduous Needleleaf Forest',
+    4: 'Deciduous Broadleaf Forest',
+    5: 'Mixed Forest',
+    6: 'Closed Shrublands',
+    7: 'Open Shrublands',
+    8: 'Woody Savannas',
+    9: 'Savannas',
+    10: 'Grasslands',
+    11: 'Permanent Wetlands',
+    12: 'Croplands',
+    13: 'Urban',
+    14: 'Cropland/Natural Mosaic',
+    15: 'Snow/Ice',
+    16: 'Barren',
+    17: 'Water'
+}
+
+
+#ON SUPPRIME
 def extract_land_cover(df, tif_path):
-    """Extracts the Land Cover value from a .tif file for each lat/lon point."""
+    """Extract land cover codes and names from MODIS raster for each lat/lon point."""
     with rasterio.open(tif_path) as src:
-        # We transform lat/lon into coordinates the tif understands
-        coord_list = [(lon, lat) for lon, lat in zip(df['longitude'], df['latitude'])]
-        
-        # Sample the raster at these coordinates
-        # src.sample returns a generator, we take the first value [0] of each sample
-        df['land_cover_code'] = [val[0] for val in src.sample(coord_list)]
-        
+        coords = [(x, y) for x, y in zip(df['longitude'], df['latitude'])]
+        codes = []
+        for val in src.sample(coords):
+            if val[0] is None:
+                codes.append(None)
+            else:
+                codes.append(int(val[0]))
+    
+    df['land_cover_code'] = codes
+    # map codes to names
+    df['land_cover_name'] = df['land_cover_code'].map(MODIS_LC_LABELS)
+    
     return df
