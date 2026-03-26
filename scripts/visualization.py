@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import matplotlib as mpl
+import matplotlib.ticker as mticker
 from shapely.geometry import Point
 import geopandas as gpd
 
@@ -12,16 +13,40 @@ def _apply_map_style(ax, title):
     ax.set_extent([-20, 60, -40, 40], crs=ccrs.PlateCarree())
 
 def plot_annual_mean_map(gdf_clipped, africa_shape):
+    from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
     """Plots the single annual mean map using the box polygons."""
     fig, ax = plt.subplots(figsize=(10, 6), subplot_kw={"projection": ccrs.PlateCarree()})
     
+    # Plot the data
     gdf_clipped.plot(
         ax=ax, column="xco2", cmap="viridis",
         vmin=420, vmax=424, legend=True,
         legend_kwds={'label': "Mean XCO2 (ppm)", 'orientation': "vertical", 'shrink': 0.7}
     )
     africa_shape.boundary.plot(ax=ax, edgecolor="black", linewidth=1)
+    
     _apply_map_style(ax, "Mean XCO2 over Africa (Annual)")
+
+    # ✅ Add gridlines first
+    gl = ax.gridlines(
+        draw_labels=True, 
+        linewidth=0.5, color='gray', alpha=0.5, linestyle='--'
+    )
+    gl.top_labels = False
+    gl.right_labels = False
+
+    # ✅ Format longitude and latitude
+    gl.xformatter = LONGITUDE_FORMATTER
+    gl.yformatter = LATITUDE_FORMATTER
+
+    # ✅ Set spacing
+    gl.xlocator = mticker.FixedLocator([-20, 0, 20, 40, 60])
+    gl.ylocator = mticker.FixedLocator([-40, -20, 0, 20, 40])
+
+    # Optional: control label font size
+    gl.xlabel_style = {'size': 10}
+    gl.ylabel_style = {'size': 10}
+
     plt.savefig("./results/annual_co2_map.png", dpi=300, bbox_inches='tight')
     plt.show()
 
