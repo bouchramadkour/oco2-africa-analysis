@@ -65,5 +65,43 @@ MODIS_LC_LABELS = {
     17: 'Water'
 }
 
+#for land cover analysis
+def load_land_cover_raster(tif_path, scale_factor=10):
+    import rasterio
+    from rasterio.enums import Resampling
+    
+    with rasterio.open(tif_path) as src:
+        lc_data = src.read(
+            1,
+            out_shape=(
+                int(src.height / scale_factor),
+                int(src.width / scale_factor)
+            ),
+            resampling=Resampling.nearest
+        )
+    return lc_data
 
+def get_africa_extent(africa_shape):
+    minx, miny, maxx, maxy = africa_shape.total_bounds
+    return [minx, maxx, miny, maxy]
+
+def get_modis_colormap():
+    from matplotlib.colors import ListedColormap
+    
+    palette = [
+        "#1d0dff00",'#05450a','#086a10','#54a708','#78d203','#009900',
+        '#c6b044','#dcd159','#dade48','#fbff13','#b6ff05',
+        '#27ff87','#c24f44','#a5a5a5','#ff6d4c','#69fff8',
+        '#f9ffa4'
+    ]
+    
+    labels = [
+        'Water','Evergreen Needleleaf Forest','Evergreen Broadleaf Forest',
+        'Deciduous Needleleaf Forest','Deciduous Broadleaf Forest','Mixed Forest',
+        'Closed Shrublands','Open Shrublands','Woody Savannas','Savannas',
+        'Grasslands','Permanent Wetlands','Croplands','Urban',
+        'Cropland/Natural Mosaic','Snow/Ice','Barren'
+    ]
+    
+    return ListedColormap(palette), palette, labels
 

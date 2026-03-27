@@ -108,6 +108,48 @@ def plot_monthly_grid(gdf_final_points, africa_shape):
     plt.savefig("./results/monthly_co2_map.png", dpi=300, bbox_inches='tight')
     plt.show()
 
+#for land cover plotting
+def plot_land_cover(lc_data, extent, cmap, palette, labels):
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Patch
+    import matplotlib.ticker as mticker
+    from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 
+    plt.figure(figsize=(12, 10))
+
+    plt.imshow(
+        lc_data,
+        cmap=cmap,
+        vmin=0,
+        vmax=17,
+        extent=extent,
+        origin='upper'
+    )
+
+    plt.title("MODIS Land Cover Africa 2024", fontsize=16)
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+
+    # Gridlines
+    ax = plt.gca()
+    plt.gca().set_xticks([-20, -10, 0, 10, 20, 30, 40, 50, 60])
+    plt.gca().set_yticks([-40, -30, -20, -10, 0, 10, 20, 30, 40])
+    ax.xaxis.set_major_formatter(LongitudeFormatter())
+    ax.yaxis.set_major_formatter(LatitudeFormatter())
+    plt.grid(True, linestyle='--', alpha=0.5)
+
+    # Legend
+    patches = [Patch(color=palette[i], label=labels[i]) for i in range(len(labels))]
+    plt.legend(
+        handles=patches,
+        bbox_to_anchor=(1.05, 1),
+        loc='upper left',
+        fontsize=9,
+        title="Land Cover Types"
+    )
+
+    plt.tight_layout()
+    plt.savefig("./results/land_cover_africa.png", dpi=300, bbox_inches='tight')
+    plt.show()
 
 
