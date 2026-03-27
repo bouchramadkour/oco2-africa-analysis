@@ -66,20 +66,4 @@ MODIS_LC_LABELS = {
 }
 
 
-#ON SUPPRIME
-def extract_land_cover(df, tif_path):
-    """Extract land cover codes and names from MODIS raster for each lat/lon point."""
-    with rasterio.open(tif_path) as src:
-        coords = [(x, y) for x, y in zip(df['longitude'], df['latitude'])]
-        codes = []
-        for val in src.sample(coords):
-            if val[0] is None:
-                codes.append(None)
-            else:
-                codes.append(int(val[0]))
-    
-    df['land_cover_code'] = codes
-    # map codes to names
-    df['land_cover_name'] = df['land_cover_code'].map(MODIS_LC_LABELS)
-    
-    return df
+

@@ -105,29 +105,5 @@ def plot_monthly_grid(gdf_final_points, africa_shape):
     plt.show()
 
 
-##ON SUPPRIME
-import seaborn as sns
 
-def plot_co2_by_land_cover(df):
-    """Boxplot showing CO2 distribution for each land cover type."""
-    
-    # trier les classes dans l'ordre MODIS
-    lc_order = [
-        'Evergreen Needleleaf Forest','Evergreen Broadleaf Forest','Deciduous Needleleaf Forest',
-        'Deciduous Broadleaf Forest','Mixed Forest','Closed Shrublands','Open Shrublands',
-        'Woody Savannas','Savannas','Grasslands','Permanent Wetlands','Croplands','Urban',
-        'Cropland/Natural Mosaic','Snow/Ice','Barren','Water'
-    ]
-    
-    plt.figure(figsize=(16,6))
-    sns.boxplot(
-        x='land_cover_name', y='xco2', data=df, order=lc_order, palette="Set3"
-    )
-    
-    plt.xticks(rotation=45, ha='right')
-    plt.ylabel("XCO₂ (ppm)")
-    plt.xlabel("Land Cover Type")
-    plt.title("XCO₂ Distribution by Land Cover Type in Africa")
-    plt.tight_layout()
-    plt.show()
 
