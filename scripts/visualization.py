@@ -27,25 +27,29 @@ def plot_annual_mean_map(gdf_clipped, africa_shape):
     
     _apply_map_style(ax, "Mean XCO2 over Africa (Annual)")
 
-    # ✅ Add gridlines first
-    gl = ax.gridlines(
-        draw_labels=True, 
-        linewidth=0.5, color='gray', alpha=0.5, linestyle='--'
-    )
+    # # ✅ Add gridlines first
+    # gl = ax.gridlines(
+    #     draw_labels=True, 
+    #     linewidth=0.5, color='gray', alpha=0.5, linestyle='--'
+    # )
+    # gl.top_labels = False
+    # gl.right_labels = False
+
+    # # ✅ Format longitude and latitude
+    # gl.xformatter = LONGITUDE_FORMATTER
+    # gl.yformatter = LATITUDE_FORMATTER
+
+    # # ✅ Set spacing
+    # gl.xlocator = mticker.FixedLocator([-20, 0, 20, 40, 60])
+    # gl.ylocator = mticker.FixedLocator([-40, -20, 0, 20, 40])
+
+    # # Optional: control label font size
+    # gl.xlabel_style = {'size': 10}
+    # gl.ylabel_style = {'size': 10}
+    # latitude / longitude (optionnel mais propre)
+    gl = ax.gridlines(draw_labels=True, linewidth=0.5, linestyle='--', alpha=0.5)
     gl.top_labels = False
     gl.right_labels = False
-
-    # ✅ Format longitude and latitude
-    gl.xformatter = LONGITUDE_FORMATTER
-    gl.yformatter = LATITUDE_FORMATTER
-
-    # ✅ Set spacing
-    gl.xlocator = mticker.FixedLocator([-20, 0, 20, 40, 60])
-    gl.ylocator = mticker.FixedLocator([-40, -20, 0, 20, 40])
-
-    # Optional: control label font size
-    gl.xlabel_style = {'size': 10}
-    gl.ylabel_style = {'size': 10}
 
     plt.savefig("./results/annual_co2_map.png", dpi=300, bbox_inches='tight')
     plt.show()
